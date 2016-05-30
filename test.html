@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style media="screen">
+            body {
+                color: red;
+            }
+
+            .blue {
+                color: blue;
+            }
+
+            h3 {
+                width: 100%;
+                height: 50px;
+                background-color: black;
+            }
+
+            img {
+                height: 50px;
+                width: 50px;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+        <title>Accordion test</title>
+    </head>
+    <body>
+        <h1>test page</h1>
+
+
+        <div class="accordion">
+            <h3> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfpBoUlT2cFlunOcpZtx0DuqEqvb9DIMzU6a-LfCnJsRMY3N6z" alt="" />first tab</h3>
+            <div class="blank">
+                blank div
+            </div>
+            <h3>second tab</h3>
+            <ul>
+                <li>some content</li>
+                <li>some more content for second tag</li>
+            </ul>
+
+            <h3>third tab</h3>
+            <ul>
+                <li>some content</li>
+                <li>some more content for third tag</li>
+            </ul>
+
+            <h3>fourth tab</h3>
+            <ul>
+                <li>some content</li>
+                <li>some more content for fourth tag</li>
+            </ul>
+
+        </div>
+
+
+
+
+
+
+
+
+        <script src="test.js"></script>
+        <script type="text/javascript">
+            $('.accordion').accordion()
+        </script>
+    </body>
+</html>

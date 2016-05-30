@@ -1,0 +1,73 @@
+body {
+    /*background-color: #818a8d;*/
+    background: radial-gradient(#818a8d, yellow, #1ebeb9);
+    margin: 0;
+}
+
+.fixed-width {
+    margin: 0 auto;
+    width: 1000px;
+    /*background-image: url('http://az616578.vo.msecnd.net/files/2015/12/19/6358614596527738711752945771_music.jpg');*/
+    height: 1000px;
+}
+
+.navbar {
+    background: black;
+    height: 50px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    float: left;
+    margin-left: 20px;
+    margin-top: 4px;
+}
+
+#song, #artist {
+    width: 300px;
+    height: 35px;
+    font-size: 2em;
+    font-family: Optima, sans-serif;;
+}
+
+.result-active {
+    color: black;
+}
+
+
+
+.result-tab {
+    height: 50px;
+    width: 49%;
+    float: left;
+    color: white;
+    margin: 1px 0px;
+    background-color: black;
+    border: 1px solid #11e32a;
+}
+
+
+.result-tab img {
+    padding: 8px;
+}
+
+.result-tab p {
+    color: white;
+    position: relative;
+    top: -52px;
+    left: 53px;
+}
+
+.result-tab:nth-of-type(even) {
+    margin-left: 16px;
+
+}
+
+.error {
+    color: red;
+}
+
+.test {
+    background-color: blue;
+}
