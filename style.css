@@ -1,6 +1,6 @@
 body {
     /*background-color: #818a8d;*/
-    background: radial-gradient(#818a8d, yellow, #1ebeb9);
+    background: radial-gradient(#818a8d, grey, #1ebeb9);
     margin: 0;
 }
 
@@ -59,15 +59,21 @@ body {
     left: 53px;
 }
 
-.result-tab:nth-of-type(even) {
-    margin-left: 16px;
+.clicked-tab {
+    height: 150px;
+}
+
+.hover-tab {
+    background-color: #3f423d;
+    cursor: pointer;
+}
+
+.result-tab .right {
+    float: right;
+    /*background-color: blue;*/
 
 }
 
 .error {
     color: red;
-}
-
-.test {
-    background-color: blue;
 }
