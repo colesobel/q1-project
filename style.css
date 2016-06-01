@@ -2,6 +2,7 @@ body {
     /*background-color: #818a8d;*/
     background: radial-gradient(#818a8d, grey, #1ebeb9);
     margin: 0;
+    font-family: Optima, sans-serif;
 }
 
 .fixed-width {
@@ -24,23 +25,31 @@ body {
     margin-top: 4px;
 }
 
-#song, #artist {
+#song, #artist, #submit {
     width: 300px;
     height: 35px;
     font-size: 2em;
-    font-family: Optima, sans-serif;;
+    font-family: Optima, sans-serif;
 }
 
 .result-active {
     color: black;
 }
 
+.results-left {
+    float: left;
+    width: 50%;
+}
 
+.results-right {
+    float: right;
+    width: 50%;
+}
 
 .result-tab {
     height: 50px;
-    width: 49%;
-    float: left;
+    width: 99%;
+    /*float: left;*/
     color: white;
     margin: 1px 0px;
     background-color: black;
@@ -60,7 +69,7 @@ body {
 }
 
 .clicked-tab {
-    height: 150px;
+    height: 200px;
 }
 
 .hover-tab {
@@ -74,6 +83,13 @@ body {
 
 }
 
+#guide {
+    font-size: 2.5em;
+    text-align: center;
+    margin-top: 20%;
+}
+
 .error {
-    color: red;
+    font-size: 2.5em;
+    display: none;
 }
