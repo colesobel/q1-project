@@ -8,7 +8,6 @@ body {
 .fixed-width {
     margin: 0 auto;
     width: 1000px;
-    /*background-image: url('http://az616578.vo.msecnd.net/files/2015/12/19/6358614596527738711752945771_music.jpg');*/
     height: 1000px;
 }
 
@@ -70,6 +69,14 @@ body {
 
 .clicked-tab {
     height: 200px;
+}
+
+.content-left {
+    /*float: left;*/
+}
+
+.content-right {
+    /*float: right;*/
 }
 
 .hover-tab {

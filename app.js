@@ -21,13 +21,12 @@ $(document).ready(function() {
                     var flag = true
                     data.similartracks.track.forEach(function(track) {
                         if (flag === true) {
-                            $('.results-left').append(`<div class="result-tab left" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
+                            $('.results-left').append(`<div class="result-tab left" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
+
                             flag = !flag
-                            // console.log(flag);
                         } else {
-                            $('.results-right').append(`<div class="result-tab right" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
+                            $('.results-right').append(`<div class="result-tab right" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
                             flag = !flag
-                            // console.log(flag);
                         }
                     })
                 }
@@ -35,10 +34,7 @@ $(document).ready(function() {
 
                 $('.result-tab').click(function() {
                     $(this).toggleClass('clicked-tab', 500)
-                    // console.log($(this).attr('data-track'));
-                    // console.log($(this).attr('data-artist'));
-                    // $('.clicked-tab').append('<p class="clicked-tab">Hello!</p>')
-                    // .remove('.track-info')
+                    $('.result-tab').append('<p class="content">hello</p>').find('.content').not(remove())
                     $('.clicked-tab').not(this).removeClass('clicked-tab', 500)
                 });
 
