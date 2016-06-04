@@ -34,7 +34,25 @@ $(document).ready(function() {
 
                 $('.result-tab').click(function() {
                     $(this).toggleClass('clicked-tab', 500)
-                    $('.result-tab').append('<p class="content">hello</p>').find('.content').not(remove())
+                    var trackName = $(this).attr('data-track')
+                    var artistName = $(this).attr('data-artist')
+                    $.ajax({
+                        type: 'GET',
+                        url: `https://api.spotify.com/v1/search?q=${trackName}&type=track&market=US`,
+                        success: function(data) {
+                            console.log('api call track', trackName);
+                            console.log('api call artist', artistName);
+                            for (var i=0; i<data.tracks.items.length; i++) {
+                                if (data.tracks.items[i].name === trackName)  {
+                                    $('.clicked-tab').append(`<iframe width="560" height="315" src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
+                                    console.log('success');
+                                    return
+                                }
+                            }
+                        }
+                    })
+
+                    // $('.result-tab').append('<p class="content">hello</p>').find('.content').not(remove())
                     $('.clicked-tab').not(this).removeClass('clicked-tab', 500)
                 });
 
