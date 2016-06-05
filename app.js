@@ -1,12 +1,13 @@
 $(document).ready(function() {
-
+    var userPlaylist = {}
     $('#submit').click(function() {
 
         $('.results-left').empty()
         $('.results-right').empty()
         $('.error').empty()
         $('#guide').slideUp(500)
-        $('.player').empty()
+        $('.player').empty().slideUp(500)
+        $('.player-header').empty().slideUp(500)
         var song = $('#song').val().trim()
         var artist = $('#artist').val().trim()
         var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
@@ -40,7 +41,16 @@ $(document).ready(function() {
                     $(this).toggleClass('clicked-tab', 500)
                     var trackName = $(this).attr('data-track')
                     var artistName = $(this).attr('data-artist')
-                    $('.player-header').append(`<p> ${trackName}, ${artistName}`)
+                    $('.player-header').append(`<p> ${trackName}, ${artistName}<div class="star"</div></p>`)
+                    $('.star').click(function() {
+                        $(this).css({'color': 'red',
+                                    'border-bottom': '17px solid red'})
+                        $('.star:before').css({'border-bottom': '100px solid red'})
+                        $('.star:after').css({'border-bottom': '17px solid red',
+                                            'color': 'red'})
+                        userPlaylist[trackName] = artistName
+                        console.log(userPlaylist);
+                    })
 
                     //API call to Spotify
                     $.ajax({
