@@ -41,13 +41,11 @@ $(document).ready(function() {
                     $(this).toggleClass('clicked-tab', 500)
                     var trackName = $(this).attr('data-track')
                     var artistName = $(this).attr('data-artist')
-                    $('.player-header').append(`<p> ${trackName}, ${artistName}<div class="star"</div></p>`)
-                    $('.star').click(function() {
-                        $(this).css({'color': 'red',
-                                    'border-bottom': '17px solid red'})
-                        $('.star:before').css({'border-bottom': '100px solid red'})
-                        $('.star:after').css({'border-bottom': '17px solid red',
-                                            'color': 'red'})
+                    $('.player-header').append(`<img src="green-heart.png" class="green-heart"/> <img src="Red_Heart.gif" class="red-heart"/><p> ${trackName}, ${artistName}</p>`)
+                    $('.green-heart').click(function() {
+                        $(this).slideUp(500)
+                        $('.red-heart').slideDown(500)
+
                         userPlaylist[trackName] = artistName
                         console.log(userPlaylist);
                     })
@@ -55,14 +53,14 @@ $(document).ready(function() {
                     //API call to Spotify
                     $.ajax({
                         type: 'GET',
-                        url: `https://api.spotify.com/v1/search?q=${trackName}&type=track&market=US`,
+                        url: `https://api.spotify.com/v1/search?q=${trackName} ${artistName}&type=track&market=US`,
                         success: function(data) {
                             var found = false
                             // console.log('api call track', trackName);
                             // console.log('api call artist', artistName);
                             for (var i=0; i<data.tracks.items.length; i++) {
                                 // console.log(data.tracks.items[i].artists[0].name);
-                                if (data.tracks.items[i].name.toLowerCase() === trackName.toLowerCase() && data.tracks.items[i].artists[0].name.toLowerCase() === artistName.toLowerCase())  {
+                                if (data.tracks.items[i].name.toLowerCase().includes(trackName.toLowerCase()) && data.tracks.items[i].artists[0].name.toLowerCase() === artistName.toLowerCase())  {
                                     $('.player').append(`<iframe src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
                                     found = true
                                     return

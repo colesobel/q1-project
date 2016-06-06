@@ -13,7 +13,7 @@ body {
 .fixed-width {
     margin: 0 auto;
     width: 1000px;
-    height: 1000px;
+    height: 100vh;
 }
 
 .navbar {
@@ -29,11 +29,17 @@ body {
     margin-top: 4px;
 }
 
-#song, #artist, #submit {
+#song, #artist, #submit, button{
     width: 200px;
     height: 35px;
     font-size: 2em;
     font-family: Optima, sans-serif;
+    margin-left: 37px;
+}
+
+button {
+    font-size: 1em;
+    margin: 5px 5px 5px 37px;
 }
 
 .result-active {
@@ -53,11 +59,11 @@ body {
 .result-tab {
     height: 50px;
     width: 99%;
-    /*float: left;*/
     color: white;
     margin: 1px 0px;
     background-color: black;
     border: 1px solid #11e32a;
+    overflow: hidden;
 }
 
 
@@ -98,7 +104,7 @@ body {
 #guide {
     font-size: 2.5em;
     text-align: center;
-    margin-top: 20%;
+    margin-top: 30%;
 }
 
 .error {
@@ -123,6 +129,7 @@ body {
     width: 400px;
     text-align: center;
     display: none;
+    position: relative;
 }
 
 .player iframe {
@@ -132,53 +139,14 @@ body {
 
 }
 
-.star {
-   margin: 0;
-   position: relative;
-   display: block;
-   color: green;
-   width: 0px;
-   height: 0px;
-   border-right:  25px solid transparent;
-   border-bottom: 17px  solid green;
-   border-left:   25px solid transparent;
-   cursor: pointer;
-   -moz-transform:    rotate(35deg);
-   -webkit-transform: rotate(35deg);
-   -ms-transform:     rotate(35deg);
-   -o-transform:      rotate(35deg);
+.green-heart, .red-heart {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    cursor: pointer;
 }
-.star:before {
-   border-bottom: 20px solid green;
-   border-left: 7px solid transparent;
-   border-right: 7px solid transparent;
-   position: absolute;
-   height: 0;
-   width: 0;
-   top: -11px;
-   left: -16px;
-   display: block;
-   content: '';
-   -webkit-transform: rotate(-35deg);
-   -moz-transform:    rotate(-35deg);
-   -ms-transform:     rotate(-35deg);
-   -o-transform:      rotate(-35deg);
 
-}
-.star:after {
-   position: absolute;
-   display: block;
-   color: green;
-   top: 1px;
-   left: -26px;
-   width: 0px;
-   height: 0px;
-   border-right: 25px solid transparent;
-   border-bottom: 17px solid green;
-   border-left: 25px solid transparent;
-   -webkit-transform: rotate(-70deg);
-   -moz-transform:    rotate(-70deg);
-   -ms-transform:     rotate(-70deg);
-   -o-transform:      rotate(-70deg);
-   content: '';
+.red-heart {
+    display: none;
 }
