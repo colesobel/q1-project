@@ -30,12 +30,13 @@ body {
 }
 
 #song, #artist, #submit, button{
-    width: 200px;
+    width: 220px;
     height: 35px;
     font-size: 2em;
     font-family: Optima, sans-serif;
-    margin-left: 37px;
+    margin-left: 18px;
 }
+
 
 button {
     font-size: 1em;
@@ -46,24 +47,21 @@ button {
     color: black;
 }
 
-.results-left {
-    float: left;
-    width: 50%;
-}
 
-.results-right {
-    float: right;
-    width: 50%;
+.results {
+    width: 100%;
+
 }
 
 .result-tab {
     height: 50px;
-    width: 99%;
+    width: 47.5%;
     color: white;
-    margin: 1px 0px;
+    margin: 1px 1%;
     background-color: black;
     border: 1px solid #11e32a;
     overflow: hidden;
+    display: inline-block;
 }
 
 
@@ -82,13 +80,6 @@ button {
     background-color: #3f423d;
 }
 
-.content-left {
-    /*float: left;*/
-}
-
-.content-right {
-    /*float: right;*/
-}
 
 .hover-tab {
     background-color: #3f423d;

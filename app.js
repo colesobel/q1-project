@@ -2,8 +2,7 @@ $(document).ready(function() {
     var userPlaylist = {}
     $('#submit').click(function() {
 
-        $('.results-left').empty()
-        $('.results-right').empty()
+        $('.results').empty()
         $('.error').empty()
         $('#guide').slideUp(500)
         $('.player').empty().slideUp(500)
@@ -20,15 +19,8 @@ $(document).ready(function() {
                 if (data.message === 'Track not found' || data.similartracks.track.length === 0) {
                     $('.error').html('Sorry, no track information found').show(500)
                 } else {
-                    var flag = true
                     data.similartracks.track.forEach(function(track) {
-                        if (flag === true) {
-                            $('.results-left').append(`<div class="result-tab left" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
-                            flag = !flag
-                        } else {
-                            $('.results-right').append(`<div class="result-tab right" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
-                            flag = !flag
-                        }
+                        $('.results').append(`<div class="result-tab left" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
                     })
                 }
 
