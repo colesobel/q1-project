@@ -109,10 +109,15 @@ $(document).ready(function() {
                         success: function(data) {
                             var found = false
                             for (var i=0; i<data.tracks.items.length; i++) {
-                                if (data.tracks.items[i].name.toLowerCase().includes(trackName.toLowerCase()) && data.tracks.items[i].artists[0].name.toLowerCase() === artistName.toLowerCase())  {
+                                // if (data.tracks.items[i].name.toLowerCase().includes(trackName.toLowerCase()) && data.tracks.items[i].artists[0].name.toLowerCase() === artistName.toLowerCase())  {
+                                //     $('.player').append(`<iframe src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
+                                //     found = true
+                                //     return
+                                // }
+                                if (containsAll(data.tracks.items[i].name, trackName.toLowerCase()) && containsAll(data.tracks.items[i].artists[0].name, artistName.toLowerCase())) {
                                     $('.player').append(`<iframe src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
-                                    found = true
-                                    return
+                                        found = true
+                                        return
                                 }
                             }
                             if (found === false) {
@@ -156,26 +161,6 @@ $(document).ready(function() {
                     })
 
                 })
-
-                // Save playlist feature - post playlist to database (view 2)
-                // $('#save-playlist').click(function() {
-                //     mongoUser.userName = userName
-                //     mongoUser.tracks = userPlaylist
-                //     $.ajax( {
-                //         url: "https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb",
-                //         data: JSON.stringify(mongoUser),
-                //         type: "POST",
-                //         contentType: "application/json",
-                //         success: function(data) {
-                //             console.log(data);
-                //         },
-                //         error: function(xhr, status, err) {
-                //             console.log(err);
-                //             }
-                //     } );
-                // })
-
-
             },
             error: function() {
                 alert('Error loading songs')
