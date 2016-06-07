@@ -111,11 +111,21 @@ $(document).ready(function() {
                     $('#guide').hide(500)
                     $('.error').hide(500)
                     $('.my-playlist').show(500)
-                    for (var song in currentSelections) {
-                        $('.songs').append('<li></li>')
-                        $('li').last().append(`${song}, ${currentSelections[song]}`)
-                        // $('li').sortable()
-                    }
+
+                    //Call to mongolab to display up-to-date userplaylist
+                    $.ajax({
+                        type: 'GET',
+                        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+                        success: function(data) {
+                            data.forEach(function(account) {
+                                if (account.userName === userName) {
+                                    for (track in account.tracks) {
+                                        console.log(`${track}: ${account.tracks[track]}`);
+                                    }
+                                }
+                            })
+                        }
+                    })
 
                 })
 
@@ -136,22 +146,6 @@ $(document).ready(function() {
                 //             }
                 //     } );
                 // })
-
-                //View saved playlist from mongo database (view 2)
-                $('#mongo-playlist').click(function() {
-                    $.ajax({
-                        type: 'GET',
-                        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb'
-                    }).done(function(data) {
-                        data.forEach(function(account) {
-                            if (account.userName === userName) {
-                                for (track in account.tracks) {
-                                    console.log(`${track}: ${account.tracks[track]}`);
-                                }
-                            }
-                        })
-                    })
-                })
 
 
             },
