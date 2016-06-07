@@ -31,7 +31,8 @@ $(document).ready(function() {
     })
 
     var currentSelections = {}
-
+    var upToDatePlaylist = {}
+    var userTracks = {}
     //Submit track familiarity search (view 1)
     $('#submit').click(function() {
 
@@ -83,7 +84,7 @@ $(document).ready(function() {
                                 data.forEach(function(account) {
                                     if (account.userName === userName) {
                                         var mongoId = account._id.$oid;
-                                        var userTracks = account.tracks;
+                                        userTracks = account.tracks;
                                         for (song in currentSelections) {
                                             userTracks[song] = currentSelections[song]
                                         }
@@ -109,11 +110,6 @@ $(document).ready(function() {
                         success: function(data) {
                             var found = false
                             for (var i=0; i<data.tracks.items.length; i++) {
-                                // if (data.tracks.items[i].name.toLowerCase().includes(trackName.toLowerCase()) && data.tracks.items[i].artists[0].name.toLowerCase() === artistName.toLowerCase())  {
-                                //     $('.player').append(`<iframe src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
-                                //     found = true
-                                //     return
-                                // }
                                 if (containsAll(data.tracks.items[i].name, trackName.toLowerCase()) && containsAll(data.tracks.items[i].artists[0].name, artistName.toLowerCase())) {
                                     $('.player').append(`<iframe src="${data.tracks.items[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
                                         found = true
@@ -156,9 +152,40 @@ $(document).ready(function() {
                             data.forEach(function(account) {
                                 if (account.userName === userName) {
                                     for (track in account.tracks) {
-                                        $('.songs').append(`<li>${track}, ${account.tracks[track]}</li>`)
+                                        $('.songs').append(`<li data-track="${track}">${track}, ${account.tracks[track]} </li>`)
+                                        $('li').last().append(`<img src="delete-button.png">`)
+                                        // $('li').sortable({containment: 'parent'})
+
+
                                     }
                                 }
+                            })
+                            $('.songs li img').click(function() {
+
+                                var trackToDelete = $(this).parent().attr('data-track')
+
+                                $.ajax({
+                                    url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+                                    success: function(data) {
+                                        var userTracks = {}
+                                        var mongoId = ''
+                                        data.forEach(function(account) {
+                                            if (account.userName === userName) {
+                                                mongoId = account._id.$oid;
+                                                userTracks = account.tracks
+                                            }
+                                        })
+                                        delete userTracks[trackToDelete]
+                                        $.ajax({
+                                            type: 'PUT',
+                                            url: `https://api.mlab.com/api/1/databases/songsearch/collections/playlist/${mongoId}?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb`,
+                                            contentType: "application/json",
+                                            data: JSON.stringify( { "$set" : { 'tracks' : userTracks } } )
+                                        }).done(function() {
+                                            alert('Track deleted from playlist successfully')
+                                        })
+                                    }
+                                })
                             })
                         }
                     })
