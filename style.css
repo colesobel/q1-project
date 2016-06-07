@@ -101,6 +101,7 @@ button {
 .error {
     font-size: 2.5em;
     display: none;
+    text-align: center;
 }
 
 .player {
@@ -140,4 +141,19 @@ button {
 
 .red-heart {
     display: none;
+}
+
+.my-playlist {
+    font-size: 2.5em;
+    text-align: center;
+    display: none;
+}
+
+.songs li {
+    width: 200px;
+    font-size: .6em;
+    text-align: left;
+    list-style: none;
+    margin: 10px;
+    cursor: pointer;
 }

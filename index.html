@@ -14,7 +14,7 @@
                 <input type="text" class="nav-item" id="song" placeholder="Enter a song" autofocus="">
                 <input type="text" class="nav-item" id="artist" placeholder="Enter the artist">
                 <input type="submit" class="nav-item" id="submit" value="Search!">
-                <a href="playlist.html"><button type="button" name="button">View My Playlist</button></a>
+                <button type="button" name="button" id="view-playlist">View My Playlist</button>
             </div>
             <div class="error">
 
@@ -34,9 +34,16 @@
             <div class="results">
 
             </div>
-            <!-- <div class="results-right">
 
-            </div> -->
+            <div class="my-playlist">
+                <p>My Playlist</p>
+                <input type="submit" id="save-playlist" value="Save Playlist!">
+                <input type="submit" id="mongo-playlist"value="View my saved playlist">
+                <ul class="songs">
+
+                </ul>
+            </div>
+
         </div>
 
 

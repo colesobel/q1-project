@@ -1,8 +1,15 @@
 $(document).ready(function() {
+    var userName = prompt('Enter your username')
+    console.log(userName);
     var userPlaylist = {}
+    var mongoUser = {}
+
+    //Submit track familiarity search (view 1)
     $('#submit').click(function() {
 
         $('.results').empty()
+        $('.results').show(500)
+        $('.my-playlist').hide(500)
         $('.error').empty()
         $('#guide').slideUp(500)
         $('.player').empty().slideUp(500)
@@ -11,20 +18,20 @@ $(document).ready(function() {
         var artist = $('#artist').val().trim()
         var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
 
-        //API call to LastFM
+        //API call to LastFM (view 1)
         $.ajax({
             type: 'GET',
             url: `http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${artist}&track=${song}&api_key=${apiKey}&format=json`,
             success: function(data) {
                 if (data.message === 'Track not found' || data.similartracks.track.length === 0) {
-                    $('.error').html('Sorry, no track information found').show(500)
+                    $('.error').html('Sorry, no track information found').slideDown(500)
                 } else {
                     data.similartracks.track.forEach(function(track) {
                         $('.results').append(`<div class="result-tab left" id="${track.name}${track.artist.name}" data-track="${track.name}" data-artist="${track.artist.name}"><img src="${track.image[0]['#text']}"/><p>${track.name}, ${track.artist.name}</p></div>`)
                     })
                 }
 
-
+                //Track tab click to start playing song (view 1)
                 $('.result-tab').click(function() {
                     $('.player').empty()
                     $('.player-header').empty()
@@ -42,7 +49,7 @@ $(document).ready(function() {
                         console.log(userPlaylist);
                     })
 
-                    //API call to Spotify
+                    //API call to Spotify (view 1)
                     $.ajax({
                         type: 'GET',
                         url: `https://api.spotify.com/v1/search?q=${trackName} ${artistName}&type=track&market=US`,
@@ -66,9 +73,56 @@ $(document).ready(function() {
                     $('.clicked-tab').not(this).removeClass('clicked-tab', 500)
                 });
 
-
+                //Result hover functionality (view 1)
                 $('.result-tab').hover(function() {
                     $(this).toggleClass('hover-tab')
+                })
+
+
+
+                //Submit button to view playlist - Changes to view 2 (view 1)
+                $('#view-playlist').click(function() {
+                    $('.songs').empty()
+                    $('.player-header').hide(500)
+                    $('.player').hide(500)
+                    $('.results').hide(500)
+                    $('#guide').hide(500)
+                    $('.error').hide(500)
+                    $('.my-playlist').show(500)
+                    for (var song in userPlaylist) {
+                        $('.songs').append('<li></li>')
+                        $('li').last().append(`${song}, ${userPlaylist[song]}`)
+                        // $('li').sortable()
+                    }
+
+                })
+
+                // Save playlist feature - post playlist to database (view 2)
+                $('#save-playlist').click(function() {
+                    mongoUser.userName = userName
+                    mongoUser.tracks = userPlaylist
+                    $.ajax( {
+                        url: "https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb",
+                        data: JSON.stringify(mongoUser),
+                        type: "POST",
+                        contentType: "application/json",
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        error: function(xhr, status, err) {
+                            console.log(err);
+                            }
+                    } );
+                })
+
+                //View saved playlist from mongo database (view 2)
+                $('#mongo-playlist').click(function() {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb'
+                    }).done(function(data) {
+                        console.log(data);
+                    })
                 })
 
 
