@@ -121,6 +121,7 @@ $(document).ready(function() {
                                 if (account.userName === userName) {
                                     for (track in account.tracks) {
                                         console.log(`${track}: ${account.tracks[track]}`);
+                                        $('.songs').append(`<li>${track}, ${account.tracks[track]}</li>`)
                                     }
                                 }
                             })
