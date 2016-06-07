@@ -1,8 +1,36 @@
 $(document).ready(function() {
     var userName = prompt('Enter your username')
-    console.log(userName);
+    var hasAccount = false
+    //Checks to see if there is an account under specified username. If none found, creates one
+    $.ajax({
+        type: 'GET',
+        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+        success: function(data) {
+            data.forEach(function(account) {
+                if (account.userName === userName) {
+                    hasAccount = true
+                }
+                return
+            })
+            if (!hasAccount) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userName: userName,
+                        tracks: {}
+                    }),
+                    success: function() {
+                        console.log('User created successfully');
+                    }
+
+                })
+            }
+        }
+    })
+
     var currentSelections = {}
-    var mongoUser = {}
 
     //Submit track familiarity search (view 1)
     $('#submit').click(function() {
@@ -112,7 +140,7 @@ $(document).ready(function() {
                     $('.error').hide(500)
                     $('.my-playlist').show(500)
 
-                    //Call to mongolab to display up-to-date userplaylist
+                    //Call to mongolab to display up-to-date userplaylist (view 2)
                     $.ajax({
                         type: 'GET',
                         url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
@@ -120,7 +148,6 @@ $(document).ready(function() {
                             data.forEach(function(account) {
                                 if (account.userName === userName) {
                                     for (track in account.tracks) {
-                                        console.log(`${track}: ${account.tracks[track]}`);
                                         $('.songs').append(`<li>${track}, ${account.tracks[track]}</li>`)
                                     }
                                 }
