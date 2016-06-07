@@ -123,6 +123,9 @@ $(document).ready(function() {
                             if (found === false) {
                                 $('.player').append('<p>Sorry, no song preview available for this track</p>')
                             }
+                        },
+                        error: function() {
+                            $('.player').append('<p>Sorry, no song preview available for this track</p>')
                         }
                     })
                     $('.clicked-tab').not(this).removeClass('clicked-tab', 500)
