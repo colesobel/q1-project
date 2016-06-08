@@ -30,13 +30,29 @@ $(document).ready(function() {
         }
     })
 
+
+    //Global variable definition
     var currentSelections = {}
     var upToDatePlaylist = {}
     var userTracks = {}
-
+    var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
 
     //Submit track familiarity search (view 1)
     $('#submit').click(function() {
+
+        if ($('#song').val() === '' & $('#artist').val() === '') {
+            console.log('nada selected');
+            $('.no-input').html('No search criteria specified').slideDown(500)
+            $('#guide').hide(500)
+            return
+        } else if  ($('#song').val() === '' || $('#artist').val() === ''){
+            $('.no-input').html('Please specify both a track and an artist').slideDown(500)
+            $('#guide').hide(500)
+            return
+        }
+
+        var song = $('#song').val().trim()
+        var artist = $('#artist').val().trim()
 
         $('.results').empty()
         $('.results').show(500)
@@ -45,9 +61,7 @@ $(document).ready(function() {
         $('#guide').slideUp(500)
         $('.player').empty().slideUp(500)
         $('.player-header').empty().slideUp(500)
-        var song = $('#song').val().trim()
-        var artist = $('#artist').val().trim()
-        var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
+        $('.no-input').hide(500)
 
         //API call to LastFM (view 1)
         $.ajax({
@@ -134,70 +148,69 @@ $(document).ready(function() {
 
 
                 //Submit button to view playlist - Changes to view 2 (view 1)
-                $('#view-playlist').click(function() {
-                    $('.songs').empty()
-                    $('.player-header').hide(500)
-                    $('.player').hide(500)
-                    $('.results').hide(500)
-                    $('#guide').hide(500)
-                    $('.error').hide(500)
-                    $('.my-playlist').show(500)
-
-                    //Call to mongolab to display up-to-date userplaylist (view 2)
-                    $.ajax({
-                        type: 'GET',
-                        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
-                        success: function(data) {
-                            data.forEach(function(account) {
-                                if (account.userName === userName) {
-                                    for (track in account.tracks) {
-                                        // $('.songs').append(`<li data-track="${track}">${track}, ${account.tracks[track]} </li>`)
-                                        $('.songs').append(`<div class="playlist-result" id="${track}${account.tracks[track]}" data-track="${track}" data-artist="${account.tracks[track]}"><p>${track}, ${account.tracks[track]}</p></div>`)
-                                        $('.songs p').last().append(`<img class="delete" src="delete-button.png">`)
-                                        // $('li').last().append(`<button class="delete">Delete</button>`)
-                                        // $('.playlist-result').sortable()
-
-
-                                    }
-                                }
-                            })
-                            //Click delete to delete song from playlist
-                            $('.songs div .delete').click(function() {
-                                var trackToDelete = $(this).parent().attr('data-track')
-
-                                //Call to get upload updated user playlist and delete track from local version
-                                $.ajax({
-                                    url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
-                                    success: function(data) {
-                                        var userTracks = {}
-                                        var mongoId = ''
-                                        data.forEach(function(account) {
-                                            if (account.userName === userName) {
-                                                mongoId = account._id.$oid;
-                                                userTracks = account.tracks
-                                            }
-                                        })
-                                        delete userTracks[trackToDelete]
-
-                                        //Updates the database with the newest local version (track has been deleted)
-                                        $.ajax({
-                                            type: 'PUT',
-                                            url: `https://api.mlab.com/api/1/databases/songsearch/collections/playlist/${mongoId}?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb`,
-                                            contentType: "application/json",
-                                            data: JSON.stringify( { "$set" : { 'tracks' : userTracks } } ),
-                                            success: alert('Track deleted from playlist successfully')
-                                        })
-                                    }
-                                })
-                            })
-                        }
-                    })
-
-                })
             },
             error: function() {
                 alert('Error loading songs')
             }
         })
+    })
+
+    $('#view-playlist').click(function() {
+        $('.songs').empty()
+        $('.player-header').hide(500)
+        $('.player').hide(500)
+        $('.results').hide(500)
+        $('#guide').hide(500)
+        $('.error').hide(500)
+        $('.my-playlist').show(500)
+
+        // Call to mongolab to display up-to-date userplaylist (view 2)
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+            success: function(data) {
+                data.forEach(function(account) {
+                    if (account.userName === userName) {
+                        for (track in account.tracks) {
+                            // $('.songs').append(`<li data-track="${track}">${track}, ${account.tracks[track]} </li>`)
+                            $('.songs').append(`<div class="playlist-result" id="${track}${account.tracks[track]}" data-track="${track}" data-artist="${account.tracks[track]}"><p>${track}, ${account.tracks[track]}</p></div>`)
+                            $('.songs p').last().append(`<img class="delete" src="delete-button.png">`)
+                            // $('.playlist-result').sortable()
+                        }
+                    }
+                })
+
+                //Click delete to delete song from playlist
+                $('.songs div .delete').click(function() {
+                    var trackToDelete = $(this).parent().attr('data-track')
+
+                    //Call to get upload updated user playlist and delete track from local version
+                    $.ajax({
+                        url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+                        success: function(data) {
+                            var userTracks = {}
+                            var mongoId = ''
+                            data.forEach(function(account) {
+                                if (account.userName === userName) {
+                                    mongoId = account._id.$oid;
+                                    userTracks = account.tracks
+                                }
+                            })
+                            delete userTracks[trackToDelete]
+
+                            //Updates the database with the newest local version (track has been deleted)
+                            $.ajax({
+                                type: 'PUT',
+                                url: `https://api.mlab.com/api/1/databases/songsearch/collections/playlist/${mongoId}?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb`,
+                                contentType: "application/json",
+                                data: JSON.stringify( { "$set" : { 'tracks' : userTracks } } ),
+                                success: alert('Track deleted from playlist successfully')
+                            })
+                        }
+                    })
+                })
+            }
+        })
+
     })
 })
