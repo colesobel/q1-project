@@ -181,10 +181,9 @@ $(document).ready(function() {
                 })
 
                 //Click delete to delete song from playlist
-                $('.songs div .delete').click(function() {
-                    var trackToDelete = $(this).parent().attr('data-track')
-
-                    //Call to get upload updated user playlist and delete track from local version
+                $('.delete').click(function() {
+                    var trackToDelete = $(this).parent().parent().attr('data-track')
+                    //Call to upload updated user playlist and delete track from local version
                     $.ajax({
                         url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
                         success: function(data) {
