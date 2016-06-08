@@ -22,7 +22,7 @@ $(document).ready(function() {
                         tracks: {}
                     }),
                     success: function() {
-                        console.log('User created successfully');
+                        alert('User created successfully');
                     }
 
                 })
@@ -33,6 +33,8 @@ $(document).ready(function() {
     var currentSelections = {}
     var upToDatePlaylist = {}
     var userTracks = {}
+
+
     //Submit track familiarity search (view 1)
     $('#submit').click(function() {
 
@@ -97,10 +99,8 @@ $(document).ready(function() {
                                     }
                                 })
                             }
-                        } );
-
+                        });
                         currentSelections[trackName] = artistName
-                        console.log(currentSelections);
                     })
 
                     //API call to Spotify (view 1)
@@ -133,7 +133,6 @@ $(document).ready(function() {
                 })
 
 
-
                 //Submit button to view playlist - Changes to view 2 (view 1)
                 $('#view-playlist').click(function() {
                     $('.songs').empty()
@@ -152,18 +151,21 @@ $(document).ready(function() {
                             data.forEach(function(account) {
                                 if (account.userName === userName) {
                                     for (track in account.tracks) {
-                                        $('.songs').append(`<li data-track="${track}">${track}, ${account.tracks[track]} </li>`)
-                                        $('li').last().append(`<img src="delete-button.png">`)
-                                        // $('li').sortable({containment: 'parent'})
+                                        // $('.songs').append(`<li data-track="${track}">${track}, ${account.tracks[track]} </li>`)
+                                        $('.songs').append(`<div class="playlist-result" id="${track}${account.tracks[track]}" data-track="${track}" data-artist="${account.tracks[track]}"><p>${track}, ${account.tracks[track]}</p></div>`)
+                                        $('.songs p').last().append(`<img class="delete" src="delete-button.png">`)
+                                        // $('li').last().append(`<button class="delete">Delete</button>`)
+                                        // $('.playlist-result').sortable()
 
 
                                     }
                                 }
                             })
-                            $('.songs li img').click(function() {
-
+                            //Click delete to delete song from playlist
+                            $('.songs div .delete').click(function() {
                                 var trackToDelete = $(this).parent().attr('data-track')
 
+                                //Call to get upload updated user playlist and delete track from local version
                                 $.ajax({
                                     url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
                                     success: function(data) {
@@ -176,13 +178,14 @@ $(document).ready(function() {
                                             }
                                         })
                                         delete userTracks[trackToDelete]
+
+                                        //Updates the database with the newest local version (track has been deleted)
                                         $.ajax({
                                             type: 'PUT',
                                             url: `https://api.mlab.com/api/1/databases/songsearch/collections/playlist/${mongoId}?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb`,
                                             contentType: "application/json",
-                                            data: JSON.stringify( { "$set" : { 'tracks' : userTracks } } )
-                                        }).done(function() {
-                                            alert('Track deleted from playlist successfully')
+                                            data: JSON.stringify( { "$set" : { 'tracks' : userTracks } } ),
+                                            success: alert('Track deleted from playlist successfully')
                                         })
                                     }
                                 })
@@ -196,8 +199,5 @@ $(document).ready(function() {
                 alert('Error loading songs')
             }
         })
-
     })
-
-
 })
