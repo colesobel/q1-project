@@ -5,11 +5,52 @@ $(document).ready(function() {
     var spotifyTrackName = ''
     var spotifyArtistName = ''
     var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
+    var hasAccount = false
+    var userName = prompt('Enter your username')
 
+    accessMongoLab()
+
+    //Click events
     $('#submit').on('click', checkUserInput)
     $(document).on('mouseenter mouseleave', '.result-tab', highlightSelection)
     $(document).on('click', '.result-tab', showPlayerHeader)
     $(document).on('click', '.green-heart', showRedHeart)
+
+
+
+    function accessMongoLab() {
+        $.ajax({
+            url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb'
+        }).done(function(data) {
+            checkForExistingAccount(data)
+        })
+    }
+
+    function checkForExistingAccount(data) {
+        data.forEach(function(account) {
+            if (account.userName === userName) {
+                hasAccount = true
+            }
+        })
+        if (!hasAccount) {
+            createAccount()
+        }
+    }
+
+    function createAccount() {
+        $.ajax({
+            type: 'POST',
+            url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userName: userName,
+                tracks: {}
+            })
+        }).done(function() {
+            alert('account created successfully')
+        })
+    }
+
 
     function checkUserInput(callback) {
         userTrack = $('#song').val().trim()
@@ -24,7 +65,6 @@ $(document).ready(function() {
         }
         getSimilarTracks()
     }
-
 
     function getSimilarTracks() {
         $('.container').children().hide(500)
@@ -68,7 +108,6 @@ $(document).ready(function() {
     function highlightSelection() {
         $(this).toggleClass('hover-tab')
     }
-
 
     function showPlayerHeader() {
         $('.player-header').show(500)
