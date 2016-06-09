@@ -12,10 +12,42 @@ $(document).ready(function() {
 
     //Click events
     $('#submit').on('click', checkUserInput)
+    $('#view-playlist').on('click', getMongoLabData)
     $(document).on('mouseenter mouseleave', '.result-tab', highlightSelection)
     $(document).on('click', '.result-tab', showPlayerHeader)
     $(document).on('click', '.green-heart', showRedHeart)
 
+
+    function getMongoLabData() {
+        $.ajax({
+            url: 'https://api.mlab.com/api/1/databases/songsearch/collections/playlist?apiKey=VhcajL6c-z_UWZkfhOGUxYR0bYEl8yEb'
+        }).done(function(data) {
+            displayUserPlaylist(data)
+        })
+    }
+
+    function displayUserPlaylist(data) {
+        $('#guide').hide(500)
+        $('.my-playlist').show(500)
+        $('.songs').show(500)
+        data.forEach(function(account) {
+            if (account.userName === userName) {
+                for (track in account.tracks) {
+                    console.log('hello');
+                    var div = document.createElement('div')
+                    $(div).addClass('playlist-result')
+                    $(div).attr('data-track', track)
+                    $(div).attr('data-artist', account.tracks[track])
+                    $(div).html(`${track}, ${account.tracks[track]}`)
+                    $('.songs').append(div)
+                }
+            }
+        })
+    }
+
+    // function appendPlaylistSongs() {
+    //
+    // }
 
 
     function accessMongoLab() {
