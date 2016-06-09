@@ -9,6 +9,7 @@ $(document).ready(function() {
     $('#submit').on('click', checkUserInput)
     $(document).on('mouseenter mouseleave', '.result-tab', highlightSelection)
     $(document).on('click', '.result-tab', showPlayerHeader)
+    $(document).on('click', '.green-heart', showRedHeart)
 
     function checkUserInput(callback) {
         userTrack = $('#song').val().trim()
@@ -78,9 +79,18 @@ $(document).ready(function() {
 
     function playSong(tracks) {
         $('.player').empty()
+        $('.player-header').empty()
+        var greenHeart = document.createElement('img')
+        greenHeart.src = "green-heart.png"
+        $(greenHeart).addClass('green-heart')
+        var redHeart = document.createElement('img')
+        redHeart.src = "Red_Heart.gif"
+        $(redHeart).addClass('red-heart')
+        $('.player-header').append(greenHeart)
+        $('.player-header').append(redHeart)
+        $('.player-header').append(`<p> ${spotifyTrackName}, ${spotifyArtistName}</p>`)
         var found = false
         for (var i = 0; i < tracks.length; i++) {
-            console.log(tracks[i].name)
             if (containsAll(tracks[i].name, spotifyTrackName.toLowerCase()) && containsAll(tracks[i].artists[0].name, spotifyArtistName.toLowerCase())) {
                 $('.player').append(`<iframe src="${tracks[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
                     found = true
@@ -90,6 +100,11 @@ $(document).ready(function() {
         if (found === false) {
             $('.player').append('<p>Sorry, no song preview available for this track</p>')
         }
+    }
+
+    function showRedHeart() {
+        $(this).slideUp(500)
+        $('.red-heart').slideDown(500)
     }
 
 
