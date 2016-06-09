@@ -2,11 +2,13 @@ $(document).ready(function() {
     //Global variable definition
     var userTrack = ''
     var userArtist = ''
+    var spotifyTrackName = ''
+    var spotifyArtistName = ''
     var apiKey = 'd78ab56ad21c652f6fcaed4ae1d11a2a'
 
     $('#submit').on('click', checkUserInput)
-    $(document).on('click', '.result-tab', playSong)
     $(document).on('mouseenter mouseleave', '.result-tab', highlightSelection)
+    $(document).on('click', '.result-tab', showPlayerHeader)
 
     function checkUserInput(callback) {
         userTrack = $('#song').val().trim()
@@ -34,6 +36,7 @@ $(document).ready(function() {
     }
 
     function appendSimilarTracks(similarTracks) {
+        $('.results').empty()
         $('.results').show(500)
         similarTracks.forEach(function(elem) {
             var trackTitle = elem.name
@@ -41,7 +44,7 @@ $(document).ready(function() {
             var resultTab = document.createElement('div')
             $(resultTab).addClass('result-tab')
             $(resultTab).attr('data-track', trackTitle)
-            $(resultTab).attr('data-track', artistName)
+            $(resultTab).attr('data-artist', artistName)
             var img = document.createElement('img')
             img.src = elem.image[0]['#text']
             $(img).appendTo(resultTab)
@@ -57,9 +60,36 @@ $(document).ready(function() {
     }
 
 
-    function playSong() {
+    function showPlayerHeader() {
         $('.player-header').show(500)
-        $('.player').show(500)        
+        $('.player').show(500)
+        callToSpotify(this)
+    }
+
+    function callToSpotify(elem) {
+        spotifyTrackName = $(elem).attr('data-track')
+        spotifyArtistName = $(elem).attr('data-artist')
+        $.ajax({
+            url: `https://api.spotify.com/v1/search?q=${spotifyTrackName} ${spotifyArtistName}&type=track&market=US`
+        }).done(function(data) {
+            playSong(data.tracks.items)
+        })
+    }
+
+    function playSong(tracks) {
+        $('.player').empty()
+        var found = false
+        for (var i = 0; i < tracks.length; i++) {
+            console.log(tracks[i].name)
+            if (containsAll(tracks[i].name, spotifyTrackName.toLowerCase()) && containsAll(tracks[i].artists[0].name, spotifyArtistName.toLowerCase())) {
+                $('.player').append(`<iframe src="${tracks[i].preview_url}" frameborder="0" allowfullscreen></iframe>`)
+                    found = true
+                    return
+            }
+        }
+        if (found === false) {
+            $('.player').append('<p>Sorry, no song preview available for this track</p>')
+        }
     }
 
 
