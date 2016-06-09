@@ -31,9 +31,18 @@ $(document).ready(function() {
         $.ajax({
             url: `http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${userArtist}&track=${userTrack}&api_key=${apiKey}&format=json`
         }).done(function(data) {
-            appendSimilarTracks(data.similartracks.track)
+            checkForValidData(data)
         })
+    }
 
+    function checkForValidData(data) {
+        if (data.message === 'Track not found' || data.similartracks.track.length === 0) {
+            $('.error').html('Sorry, no track information found').slideDown(500)
+        } else {
+            data.similartracks.track.forEach(function(track) {
+                appendSimilarTracks(data.similartracks.track)
+            })
+        }
     }
 
     function appendSimilarTracks(similarTracks) {
